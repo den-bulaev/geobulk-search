@@ -176,7 +176,11 @@
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.15s;
-  color: #ce0909;
+  color: black;
+}
+
+.bucket-btn:hover {
+  color: #ce0909
 }
 
 .tile:hover .bucket-btn {
