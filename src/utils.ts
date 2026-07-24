@@ -481,15 +481,15 @@ export const selectStyles: StylesConfig<
   ) => ({
     ...provided,
     backgroundColor: state.isSelected
-      ? "rgb(147 152 255)"
+      ? "#c0c4ff"
       : state.isFocused
         ? "#ebedff"
         : "transparent",
-    color: state.isSelected ? "white" : "black",
+    color: state.isSelected ? "black" : "black",
     cursor: "pointer",
 
     "&:active": {
-      backgroundColor: "rgb(147 152 255)",
+      backgroundColor: "#c0c4ff",
       color: "black",
     },
   }),
