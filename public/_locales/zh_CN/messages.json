@@ -1,6 +1,6 @@
 {
   "appName": {
-    "message": "NomadExpanse — Bulk Geo Search"
+    "message": "GeoBulk — Bulk Geo Search"
   },
   "appDescription": {
     "message": "一键在多个地区执行搜索。支持预设、UULE、TBS、UDM 等更多功能。"
