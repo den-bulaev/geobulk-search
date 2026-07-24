@@ -1,9 +1,9 @@
 {
   "appName": {
-    "message": "Power Search — SERP Manager"
+    "message": "GeoBulk — Bulk Geo Search"
   },
   "appDescription": {
-    "message": "Search across multiple locations in one click using presets, UULE, TBS, UDM, and more."
+    "message": "Run searches across multiple locations with one click. Use presets, UULE, TBS, UDM, and more."
   },
 
   "startLabel": {

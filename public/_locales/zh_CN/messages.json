@@ -1,8 +1,8 @@
 {
   "appName": {
-    "message": "Power Search — SERP Manager"
+    "message": "GeoBulk — Bulk Geo Search"
   },
   "appDescription": {
-    "message": "使用预设、UULE、TBS、UDM 等功能，一键搜索多个地区。"
+    "message": "一键在多个地区执行搜索。支持预设、UULE、TBS、UDM 等更多功能。"
   }
 }
