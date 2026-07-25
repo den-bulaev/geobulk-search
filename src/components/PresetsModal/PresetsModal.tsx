@@ -66,7 +66,7 @@ export function PresetsModal(props: TPresetsModalProps) {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (!presetNameRef.current?.value) {
+    if (!presetNameRef.current?.value || !tiles.length) {
       return;
     }
 
