@@ -46,6 +46,13 @@ export enum EInputNames {
   AS_EQ = "as_eq",
 }
 
+export enum EDateRange {
+  DAY = "d",
+  WEEK = "w",
+  MONTH = "m",
+  YEAR = "y",
+}
+
 export interface IParamsFormData extends ISelectNames {
   start: string;
   as_epq: string;
@@ -69,7 +76,7 @@ export const defaultSelectOptions: Record<
 };
 
 export const tbsOptions: ISelectOption[] = [
-  { label: chrome.i18n.getMessage("tbsOptionLastHour"), value: "qdr:h" },
+  // { label: chrome.i18n.getMessage("tbsOptionLastHour"), value: "qdr:h" },
   { label: chrome.i18n.getMessage("tbsOptionLastDay"), value: "qdr:d" },
   { label: chrome.i18n.getMessage("tbsOptionLastWeek"), value: "qdr:w" },
   { label: chrome.i18n.getMessage("tbsOptionLastMonth"), value: "qdr:m" },
@@ -441,11 +448,20 @@ export const getUULEString = (canonicalName: string): string => {
 };
 
 export const getSearchURL = (query: string, tiles: ITile[]): string => {
-  const params = tiles.map((el) => el.value).join("");
+  const preparedQuery = encodeURIComponent(query);
+  let queryAfter = "";
 
-  const updatedUrl = `https://www.google.com/search?q=${encodeURIComponent(
-    query,
-  )}${params}`;
+  const params = tiles
+    .map((el) => {
+      if (el.key === "tbs") {
+        queryAfter = ` ${getDateForQuery(el.rawValue)}`;
+      }
+
+      return el.value;
+    })
+    .join("");
+
+  const updatedUrl = `https://www.google.com/search?q=${preparedQuery + queryAfter}${params}`;
 
   return updatedUrl;
 };
@@ -519,4 +535,38 @@ export const removeInputMark = (
       containerDOM.classList.remove("input-mark");
     }
   }
+};
+
+export const getDateForQuery = (period: string) => {
+  const date = new Date();
+  const extractedPeriod = period.trim().split("")[period.length - 1];
+
+  switch (extractedPeriod) {
+    case EDateRange.DAY:
+      date.setDate(date.getDate() - 1);
+      break;
+
+    case EDateRange.WEEK:
+      date.setDate(date.getDate() - 7);
+      break;
+
+    case EDateRange.MONTH:
+      date.setMonth(date.getMonth() - 1);
+      break;
+
+    case EDateRange.YEAR:
+      date.setFullYear(date.getFullYear() - 1);
+      break;
+
+    default:
+      break;
+  }
+
+  const after = [
+    date.getFullYear(),
+    String(date.getMonth() + 1).padStart(2, "0"),
+    String(date.getDate()).padStart(2, "0"),
+  ].join("-");
+
+  return `after:${after}`;
 };
