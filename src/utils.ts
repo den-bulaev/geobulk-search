@@ -76,7 +76,7 @@ export const defaultSelectOptions: Record<
 };
 
 export const tbsOptions: ISelectOption[] = [
-  // { label: chrome.i18n.getMessage("tbsOptionLastHour"), value: "qdr:h" },
+  { label: chrome.i18n.getMessage("tbsOptionLastHour"), value: "qdr:h" },
   { label: chrome.i18n.getMessage("tbsOptionLastDay"), value: "qdr:d" },
   { label: chrome.i18n.getMessage("tbsOptionLastWeek"), value: "qdr:w" },
   { label: chrome.i18n.getMessage("tbsOptionLastMonth"), value: "qdr:m" },
@@ -454,7 +454,9 @@ export const getSearchURL = (query: string, tiles: ITile[]): string => {
   const params = tiles
     .map((el) => {
       if (el.key === "tbs") {
-        queryAfter = ` ${getDateForQuery(el.rawValue)}`;
+        const dateForQuery = getDateForQuery(el.rawValue);
+
+        queryAfter = dateForQuery ? ` ${dateForQuery}` : "";
       }
 
       return el.value;
@@ -559,7 +561,7 @@ export const getDateForQuery = (period: string) => {
       break;
 
     default:
-      break;
+      return "";
   }
 
   const after = [
