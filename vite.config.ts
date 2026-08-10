@@ -6,6 +6,7 @@ import path from "path";
 export default defineConfig({
   plugins: [react()],
   build: {
+    modulePreload: false,
     outDir: "dist",
     rollupOptions: {
       input: {

@@ -400,7 +400,7 @@ function App() {
           />
         </form>
         <h2 ref={titleRef} className="title">
-          {chrome.i18n.getMessage("appName")}
+          {chrome.i18n.getMessage("appNameStatic")}
         </h2>
 
         <button className="search-btn" onClick={handleClickSearch}>
