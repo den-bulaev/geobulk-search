@@ -1,8 +1,11 @@
 {
   "appName": {
+    "message": "GeoBulk — Розширений пошук"
+  },
+  "appNameStatic": {
     "message": "GeoBulk — Bulk Geo Search"
   },
   "appDescription": {
-    "message": "Мульти пошук по різним локаціям в один клік. Пресети, пошукові фільтри: UULE, TBS, UDM та багато іншого."
+    "message": "Мультипошук по різним локаціям в один клік. Пресети, пошукові фільтри: UULE, TBS, UDM та багато іншого."
   }
 }

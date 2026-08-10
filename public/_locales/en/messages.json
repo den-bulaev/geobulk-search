@@ -2,6 +2,9 @@
   "appName": {
     "message": "GeoBulk — Bulk Geo Search"
   },
+  "appNameStatic": {
+    "message": "GeoBulk — Bulk Geo Search"
+  },
   "appDescription": {
     "message": "Run searches across multiple locations with one click. Use presets, UULE, TBS, UDM, and more."
   },

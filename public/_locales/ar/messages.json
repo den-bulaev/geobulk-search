@@ -1,5 +1,8 @@
 {
   "appName": {
+    "message": "GeoBulk — البحث المتقدم"
+  },
+  "appNameStatic": {
     "message": "GeoBulk — Bulk Geo Search"
   },
   "appDescription": {
