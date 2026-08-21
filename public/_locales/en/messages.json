@@ -141,5 +141,8 @@
   },
   "searchPlaceholder": {
     "message": "Search"
+  },
+    "createPresetsTooltip": {
+    "message": "Create presets for bulk search"
   }
 }

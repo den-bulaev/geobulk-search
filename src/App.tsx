@@ -624,11 +624,6 @@ function App() {
       </div>
 
       <Tooltip id="tile-tooltip" place="bottom" openOnClick={true} />
-      <Tooltip
-        id="preset-btn-tooltip"
-        place="top"
-        render={() => <p>{chrome.i18n.getMessage("presetsTooltipBulk")}</p>}
-      />
     </div>
   );
 }
