@@ -87,7 +87,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       chrome.storage.local.get({ [ChromeStorageKeys.presets]: [] }, (res) => {
         if (
           res[ChromeStorageKeys.presets].find(
-            (el) => el.key === message.state.key,
+            (el) => el.key.toLowerCase() === message.state.key.toLowerCase(),
           )
         ) {
           sendResponse({ success: false, message: "presetNameExistsError" });
@@ -128,6 +128,47 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
           () => sendResponse({ data: updatedPresets, success: true }),
         );
       });
+      break;
+
+    case BackgroundActions.getIsRated:
+      chrome.storage.local.get(ChromeStorageKeys.isRated, (res) => {
+        sendResponse({ data: !!res[ChromeStorageKeys.isRated] });
+      });
+      break;
+
+    case BackgroundActions.setIsRated:
+      chrome.storage.local.set(
+        { [ChromeStorageKeys.isRated]: true },
+        sendResponse("success"),
+      );
+      break;
+
+    case BackgroundActions.setDaysOpened:
+      chrome.storage.local.get(
+        { [ChromeStorageKeys.daysOpened]: [] },
+        (res) => {
+          let updatedDays = res[ChromeStorageKeys.daysOpened] || [];
+
+          if (updatedDays.length >= 5) {
+            chrome.storage.local.set({}, () =>
+              sendResponse({ data: updatedDays, success: true }),
+            );
+
+            return;
+          }
+
+          if (!res[ChromeStorageKeys.daysOpened].includes(message.state)) {
+            updatedDays = [...updatedDays, message.state];
+          }
+
+          chrome.storage.local.set(
+            {
+              [ChromeStorageKeys.daysOpened]: updatedDays,
+            },
+            () => sendResponse({ data: updatedDays, success: true }),
+          );
+        },
+      );
       break;
 
     default:

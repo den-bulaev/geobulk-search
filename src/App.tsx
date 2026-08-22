@@ -29,6 +29,7 @@ import {
 } from "./utils";
 
 import icon48 from "./assets/icon48.png";
+import { RateLink } from "./components/RateLink/RateLink";
 
 function App() {
   const [tiles, setTiles] = useState<ITile[]>([]);
@@ -607,6 +608,8 @@ function App() {
             handleClickSearch={handleClickSearch}
           />
         </div>
+
+        <RateLink />
 
         <div className="btn-group">
           <button className="btn background-purple" onClick={handleClickReset}>
