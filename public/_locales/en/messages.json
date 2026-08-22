@@ -6,7 +6,7 @@
     "message": "GeoBulk — Bulk Geo Search"
   },
   "appDescription": {
-    "message": "Run searches across multiple locations with one click. Use presets, UULE, TBS, UDM, and more."
+    "message": "Multi-search in one click. Choose your search location, filters, presets, and more."
   },
 
   "startLabel": {
@@ -141,5 +141,8 @@
   },
   "searchPlaceholder": {
     "message": "Search"
+  },
+  "createPresetsTooltip": {
+    "message": "Create presets for bulk search"
   }
 }

@@ -13,6 +13,7 @@ import { BaseModal } from "../BaseModal/BaseModal";
 import { BackgroundActions, getSearchURL, ITile } from "../../utils";
 
 import { TrashIcon } from "../Icons/TrashIcon";
+import { Tooltip } from "react-tooltip";
 
 interface IPreset {
   key: string;
@@ -146,18 +147,32 @@ export function PresetsModal(props: TPresetsModalProps) {
 
   return (
     <>
-      <button
-        className="btn background-orange"
-        onClick={() => setIsModalOpen(true)}
-        data-tooltip-id="preset-btn-tooltip"
-        onAuxClick={(e) => {
-          if (e.button === 1) {
-            bulkUpload();
-          }
-        }}
-      >
-        {chrome.i18n.getMessage("presetsBtn")}
-      </button>
+      <div>
+        <button
+          className="btn background-orange"
+          onClick={() => setIsModalOpen(true)}
+          data-tooltip-id="preset-btn-tooltip"
+          onAuxClick={(e) => {
+            if (e.button === 1 && presets.length) {
+              bulkUpload();
+            }
+          }}
+        >
+          {chrome.i18n.getMessage("presetsBtn")}
+        </button>
+
+        <Tooltip
+          id="preset-btn-tooltip"
+          place="top"
+          render={() => {
+            const i18Key = presets.length
+              ? "presetsTooltipBulk"
+              : "createPresetsTooltip";
+
+            return <p>{chrome.i18n.getMessage(i18Key)}</p>;
+          }}
+        />
+      </div>
 
       {isModalOpen && (
         <BaseModal

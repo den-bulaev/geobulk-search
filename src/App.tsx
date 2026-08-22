@@ -29,6 +29,7 @@ import {
 } from "./utils";
 
 import icon48 from "./assets/icon48.png";
+import { RateLink } from "./components/RateLink/RateLink";
 
 function App() {
   const [tiles, setTiles] = useState<ITile[]>([]);
@@ -608,6 +609,8 @@ function App() {
           />
         </div>
 
+        <RateLink />
+
         <div className="btn-group">
           <button className="btn background-purple" onClick={handleClickReset}>
             {chrome.i18n.getMessage("resetBtn")}
@@ -624,11 +627,6 @@ function App() {
       </div>
 
       <Tooltip id="tile-tooltip" place="bottom" openOnClick={true} />
-      <Tooltip
-        id="preset-btn-tooltip"
-        place="top"
-        render={() => <p>{chrome.i18n.getMessage("presetsTooltipBulk")}</p>}
-      />
     </div>
   );
 }

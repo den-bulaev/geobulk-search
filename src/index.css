@@ -126,6 +126,7 @@ input::placeholder {
 .btn-block {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   width: 100%;
   padding: 5px 20px;
 }
@@ -422,4 +423,14 @@ ul.location-list::-webkit-scrollbar {
   text-overflow: ellipsis;
   text-transform: uppercase;
   white-space: nowrap;
+}
+
+.rate-extension {
+  text-decoration: none;
+  color: rgb(111, 121, 255);
+  opacity: 0.5;
+}
+
+.rate-extension:hover {
+  opacity: 1;
 }

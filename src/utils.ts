@@ -422,11 +422,16 @@ export const BackgroundActions = {
   getPresets: "getPresets",
   addPreset: "setPresets",
   deletePreset: "deletePreset",
+  getIsRated: "getIsRated",
+  setIsRated: "setIsRated",
+  setDaysOpened: "setDaysOpened",
 };
 
 export const ChromeStorageKeys = {
   tiles: "chromeStorageTiles",
   presets: "chromeStoragePresets",
+  isRated: "chromeStorageIsRated",
+  daysOpened: "chromeStorageDaysOpened",
 };
 
 export const getUULEString = (canonicalName: string): string => {
@@ -564,11 +569,15 @@ export const getDateForQuery = (period: string) => {
       return "";
   }
 
-  const after = [
+  const after = getDate(date);
+
+  return `after:${after}`;
+};
+
+export const getDate = (date: Date) => {
+  return [
     date.getFullYear(),
     String(date.getMonth() + 1).padStart(2, "0"),
     String(date.getDate()).padStart(2, "0"),
   ].join("-");
-
-  return `after:${after}`;
 };
