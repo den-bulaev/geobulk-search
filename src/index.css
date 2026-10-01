@@ -359,10 +359,6 @@ ul.location-list::-webkit-scrollbar {
   background-color: #ebedff;
 }
 
-.list-item:hover .delete-preset {
-  color: #c74a4a;
-}
-
 .element-hidden {
   display: none;
 }
@@ -410,6 +406,10 @@ ul.location-list::-webkit-scrollbar {
   padding: 0;
   cursor: pointer;
   color: #9badb7;
+}
+
+.delete-preset:hover {
+  color: #c74a4a;
 }
 
 .preset-list-item {
