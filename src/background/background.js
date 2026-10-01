@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from "uuid";
 
-import { BackgroundActions, ChromeStorageKeys, getSearchURL } from "./utils";
+import { BackgroundActions, ChromeStorageKeys, getSearchURL } from "../utils";
 
 chrome.omnibox.onInputEntered.addListener((query) => {
   chrome.storage.local.get(ChromeStorageKeys.tiles, (res) => {
@@ -126,6 +126,28 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
             [ChromeStorageKeys.presets]: updatedPresets,
           },
           () => sendResponse({ data: updatedPresets, success: true }),
+        );
+      });
+      break;
+
+    case BackgroundActions.updatePresets:
+      chrome.storage.local.get({ [ChromeStorageKeys.presets]: [] }, (res) => {
+        const updatedPresets = res[ChromeStorageKeys.presets].map((presetItem) => {
+          if (presetItem.id === message.state) {
+            return {
+              ...presetItem,
+              isChecked: !presetItem.isChecked,
+            };
+          }
+
+          return presetItem;
+        });
+
+        chrome.storage.local.set(
+          {
+            [ChromeStorageKeys.presets]: updatedPresets,
+          },
+          () => sendResponse({ data: updatedPresets }),
         );
       });
       break;
