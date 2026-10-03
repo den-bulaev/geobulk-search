@@ -19,7 +19,7 @@
 }
 
 input::placeholder {
-  color: #8A8A8A;
+  color: #8a8a8a;
 }
 
 .wrapper {
@@ -185,7 +185,7 @@ input::placeholder {
 }
 
 .bucket-btn:hover {
-  color: #ce0909
+  color: #ce0909;
 }
 
 .tile:hover .bucket-btn {
@@ -359,10 +359,6 @@ ul.location-list::-webkit-scrollbar {
   background-color: #ebedff;
 }
 
-.list-item:hover .delete-preset {
-  color: #C74A4A;
-}
-
 .element-hidden {
   display: none;
 }
@@ -409,12 +405,17 @@ ul.location-list::-webkit-scrollbar {
   background: none;
   padding: 0;
   cursor: pointer;
-  color: #9BADB7;
+  color: #9badb7;
+}
+
+.delete-preset:hover {
+  color: #c74a4a;
 }
 
 .preset-list-item {
   display: flex;
   justify-content: space-between;
+  padding-top: 0;
 }
 
 .preset-name {
@@ -423,6 +424,7 @@ ul.location-list::-webkit-scrollbar {
   text-overflow: ellipsis;
   text-transform: uppercase;
   white-space: nowrap;
+  line-height: 100%;
 }
 
 .rate-extension {
@@ -433,4 +435,39 @@ ul.location-list::-webkit-scrollbar {
 
 .rate-extension:hover {
   opacity: 1;
+}
+
+.preset {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  cursor: pointer;
+}
+
+.preset input {
+  position: absolute;
+  opacity: 0;
+}
+
+.checkbox {
+  width: 16px;
+  height: 16px;
+  border: 2px solid #aaa;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.preset input:checked + .checkbox {
+  background: #6c4cff;
+  border-color: #6c4cff;
+}
+
+.preset input:checked + .checkbox::after {
+  content: "✓";
+  display: block;
+  color: white;
+  font-size: 12px;
+  line-height: 12px;
+  text-align: center;
 }

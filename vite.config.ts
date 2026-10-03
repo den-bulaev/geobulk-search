@@ -11,7 +11,7 @@ export default defineConfig({
     rollupOptions: {
       input: {
         popup: path.resolve("index.html"), // Keep popup build
-        background: path.resolve("src/background.js"), // Background script
+        background: path.resolve("src/background/background.js"), // Background script
       },
       output: {
         entryFileNames: (chunk) => {

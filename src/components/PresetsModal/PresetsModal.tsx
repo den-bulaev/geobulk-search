@@ -16,8 +16,10 @@ import { TrashIcon } from "../Icons/TrashIcon";
 import { Tooltip } from "react-tooltip";
 
 interface IPreset {
+  id: string;
   key: string;
   params: ITile[];
+  isChecked: boolean;
 }
 
 type TPresetsModalProps = {
@@ -74,17 +76,23 @@ export function PresetsModal(props: TPresetsModalProps) {
     const presetName = presetNameRef.current.value.trim();
 
     if (presetName) {
+      const newPreset: IPreset = {
+        id: uuidv4(),
+        key: presetName,
+        params: tiles,
+        isChecked: true,
+      };
+
       chrome.runtime.sendMessage(
         {
           action: BackgroundActions.addPreset,
-          state: { key: presetName, params: tiles },
+          state: newPreset,
         },
         (response) => {
           if (!response.success) {
             setErrorKey(response.message);
           } else {
             setPresets((prev) => {
-              const newPreset: IPreset = { key: presetName, params: tiles };
               return [...prev, newPreset];
             });
           }
@@ -115,9 +123,11 @@ export function PresetsModal(props: TPresetsModalProps) {
     }
 
     presets.forEach((preset) => {
-      chrome.tabs.create({
-        url: getSearchURL(searchQuery.current!.value, preset.params),
-      });
+      if (preset.isChecked) {
+        chrome.tabs.create({
+          url: getSearchURL(searchQuery.current!.value, preset.params),
+        });
+      }
     });
   };
 
@@ -139,6 +149,26 @@ export function PresetsModal(props: TPresetsModalProps) {
           if (response.data) {
             setPresets(response.data);
             setErrorKey("");
+          }
+        }
+      },
+    );
+  };
+
+  const handleClickCheckbox = (e: MouseEvent, presetID: string) => {
+    e.stopPropagation();
+
+    chrome.runtime.sendMessage(
+      {
+        action: BackgroundActions.updatePresets,
+        state: presetID,
+      },
+      (response: { data: IPreset[] }) => {
+        if (chrome.runtime.lastError) {
+          console.error("Error:", chrome.runtime.lastError);
+        } else {
+          if (response.data?.length) {
+            setPresets(response.data);
           }
         }
       },
@@ -177,7 +207,10 @@ export function PresetsModal(props: TPresetsModalProps) {
       {isModalOpen && (
         <BaseModal
           title={chrome.i18n.getMessage("presetsTitle")}
-          tooltipTexts={[chrome.i18n.getMessage("presetsTooltip")]}
+          tooltipTexts={[
+            chrome.i18n.getMessage("presetsTooltip"),
+            chrome.i18n.getMessage("useCheckboxesTooltip"),
+          ]}
           handleClose={handleCloseModal}
         >
           <form onSubmit={handleSubmit} className="search-form">
@@ -205,10 +238,19 @@ export function PresetsModal(props: TPresetsModalProps) {
                 return (
                   <li
                     className={`list-item preset-list-item${selectedPreset?.key === preset.key ? " background-light-purple" : ""}`}
-                    key={uuidv4()}
+                    key={preset.id}
                     onClick={(e) => handleClickPreset(e, preset)}
                   >
-                    <span className="preset-name">{preset.key}</span>
+                    <div className="preset">
+                      <input
+                        type="checkbox"
+                        checked={preset.isChecked}
+                        onClick={(e) => handleClickCheckbox(e, preset.id)}
+                      ></input>
+                      <span className="checkbox"></span>
+                      <span className="preset-name">{preset.key}</span>
+                    </div>
+
                     <button
                       className="delete-preset"
                       onClick={(e) => deletePreset(e, preset.key)}

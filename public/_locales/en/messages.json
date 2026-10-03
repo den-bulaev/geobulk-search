@@ -133,6 +133,9 @@
   "presetsTooltip": {
     "message": "Preset is based on the selected parameters"
   },
+  "useCheckboxesTooltip": {
+    "message": "Select presets for bulk search using checkboxes"
+  },
   "presetNotFoundError": {
     "message": "Preset is not found"
   },
