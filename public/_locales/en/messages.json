@@ -133,9 +133,6 @@
   "presetsTooltip": {
     "message": "Preset is based on the selected parameters"
   },
-  "loadPresetTooltip": {
-    "message": "Load a preset: Reset, click a preset, Apply"
-  },
   "useCheckboxesTooltip": {
     "message": "Select presets for bulk search using checkboxes"
   },

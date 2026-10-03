@@ -209,7 +209,6 @@ export function PresetsModal(props: TPresetsModalProps) {
           title={chrome.i18n.getMessage("presetsTitle")}
           tooltipTexts={[
             chrome.i18n.getMessage("presetsTooltip"),
-            chrome.i18n.getMessage("loadPresetTooltip"),
             chrome.i18n.getMessage("useCheckboxesTooltip"),
           ]}
           handleClose={handleCloseModal}

@@ -1,6 +1,15 @@
 import { v4 as uuidv4 } from "uuid";
 
 import { BackgroundActions, ChromeStorageKeys, getSearchURL } from "../utils";
+import { runDataMigrations } from './migrations.js';
+
+chrome.runtime.onInstalled.addListener(async (details) => {
+  if (details.reason === "update") {
+    const previousVersion = details.previousVersion;
+
+    await runDataMigrations(previousVersion);
+  }
+});
 
 chrome.omnibox.onInputEntered.addListener((query) => {
   chrome.storage.local.get(ChromeStorageKeys.tiles, (res) => {
