@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from "uuid";
 
 import { BackgroundActions, ChromeStorageKeys, getSearchURL } from "../utils";
-import { runDataMigrations } from './migrations.js';
+import { runDataMigrations } from "./migrations.js";
 
 chrome.runtime.onInstalled.addListener(async (details) => {
   if (details.reason === "update") {
@@ -106,8 +106,8 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         chrome.storage.local.set(
           {
             [ChromeStorageKeys.presets]: [
-              ...res[ChromeStorageKeys.presets],
               message.state,
+              ...res[ChromeStorageKeys.presets],
             ],
           },
           () => sendResponse({ success: true }),
@@ -141,16 +141,18 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
     case BackgroundActions.updatePresets:
       chrome.storage.local.get({ [ChromeStorageKeys.presets]: [] }, (res) => {
-        const updatedPresets = res[ChromeStorageKeys.presets].map((presetItem) => {
-          if (presetItem.id === message.state) {
-            return {
-              ...presetItem,
-              isChecked: !presetItem.isChecked,
-            };
-          }
+        const updatedPresets = res[ChromeStorageKeys.presets].map(
+          (presetItem) => {
+            if (presetItem.id === message.state) {
+              return {
+                ...presetItem,
+                isChecked: !presetItem.isChecked,
+              };
+            }
 
-          return presetItem;
-        });
+            return presetItem;
+          },
+        );
 
         chrome.storage.local.set(
           {

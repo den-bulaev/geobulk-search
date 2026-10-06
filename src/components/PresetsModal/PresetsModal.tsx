@@ -93,7 +93,7 @@ export function PresetsModal(props: TPresetsModalProps) {
             setErrorKey(response.message);
           } else {
             setPresets((prev) => {
-              return [...prev, newPreset];
+              return [newPreset, ...prev];
             });
           }
         },
