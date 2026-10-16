@@ -588,41 +588,35 @@ function App() {
             const tileID = tile.id || uuidv4();
 
             return (
-              <>
-                <div
-                  className={`tile tooltip-${tileID}`}
-                  key={tileID}
-                  onMouseEnter={() => onTileFocus(tile.key)}
-                  onMouseLeave={() => onTileBlur(tile.key)}
+              <div
+                data-tooltip-id="tile-tooltip"
+                data-tooltip-html={
+                  tile.key === "uule"
+                    ? tile.rawValue
+                      .split(LOCATION_SPLITTER)
+                      .map((val, i) => {
+                        if (i === 0) {
+                          return `<p key=${tileID}>&${tile.key}=${val}</p>`;
+                        }
+                        return `<p key=${tileID}>${val}</p>`;
+                      })
+                      .join("")
+                    : `<p key=${tileID}>${tile.value}</p>`
+                }
+                className={`tile tooltip-${tileID}`}
+                key={tileID}
+                onMouseEnter={() => onTileFocus(tile.key)}
+                onMouseLeave={() => onTileBlur(tile.key)}
+              >
+                <button
+                  onClick={() => handleClickRemoveTile(tile.key)}
+                  className="icon-btn bucket-btn"
                 >
-                  <button
-                    onClick={() => handleClickRemoveTile(tile.key)}
-                    className="icon-btn bucket-btn"
-                  >
-                    <CrossSmall />
-                  </button>
+                  <CrossSmall />
+                </button>
 
-                  {tile.label}
-                </div>
-
-                <Tooltip
-                  anchorSelect={`.tooltip-${tileID}`}
-                  place="bottom"
-                  openOnClick={true}
-                  style={{ zIndex: 999 }}
-                >
-                  {tile.key === "uule" ? (
-                    tile.rawValue.split(LOCATION_SPLITTER).map((val, i) => {
-                      if (i === 0) {
-                        return <p key={tileID}>{`&${tile.key}=${val}`}</p>;
-                      }
-                      return <p key={tileID}>{val}</p>;
-                    })
-                  ) : (
-                    <p key={tileID}>{tile.value}</p>
-                  )}
-                </Tooltip>
-              </>
+                {tile.label}
+              </div>
             );
           })}
         </div>
@@ -655,6 +649,8 @@ function App() {
           </button>
         </div>
       </div>
+
+      <Tooltip id="tile-tooltip" place="bottom" openOnClick={true} />
     </div>
   );
 }
