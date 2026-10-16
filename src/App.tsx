@@ -2,6 +2,7 @@ import { RefObject, useEffect, useRef, useState } from "react";
 
 import Select, { SelectInstance } from "react-select";
 import { Tooltip } from "react-tooltip";
+import { v4 as uuidv4 } from "uuid";
 
 import { LocationModal } from "./components/LocationModal/LocationModal";
 import { PresetsModal } from "./components/PresetsModal/PresetsModal";
@@ -21,6 +22,7 @@ import {
   ISelectOption,
   ITile,
   labelTexts,
+  LOCATION_SPLITTER,
   lrOptions,
   removeInputMark,
   selectStyles,
@@ -136,8 +138,16 @@ function App() {
 
     keys.forEach((key) => {
       if (data[key]) {
-        const preparedParam = `&${key}=${data[key]}`;
+        let paramText = data[key];
+
+        if (key === "uule") {
+          paramText = data[key].split(LOCATION_SPLITTER)[0];
+        }
+
+        const preparedParam = `&${key}=${paramText}`;
+
         rawTiles.push({
+          id: uuidv4(),
           label: labelTexts[key],
           value: preparedParam,
           rawValue: data[key],
@@ -575,24 +585,44 @@ function App() {
               return null;
             }
 
-            return (
-              <div
-                className="tile"
-                key={tile.value}
-                data-tooltip-id="tile-tooltip"
-                data-tooltip-content={tile.value}
-                onMouseEnter={() => onTileFocus(tile.key)}
-                onMouseLeave={() => onTileBlur(tile.key)}
-              >
-                <button
-                  onClick={() => handleClickRemoveTile(tile.key)}
-                  className="icon-btn bucket-btn"
-                >
-                  <CrossSmall />
-                </button>
+            const tileID = tile.id || uuidv4();
 
-                {tile.label}
-              </div>
+            return (
+              <>
+                <div
+                  className={`tile tooltip-${tileID}`}
+                  key={tileID}
+                  onMouseEnter={() => onTileFocus(tile.key)}
+                  onMouseLeave={() => onTileBlur(tile.key)}
+                >
+                  <button
+                    onClick={() => handleClickRemoveTile(tile.key)}
+                    className="icon-btn bucket-btn"
+                  >
+                    <CrossSmall />
+                  </button>
+
+                  {tile.label}
+                </div>
+
+                <Tooltip
+                  anchorSelect={`.tooltip-${tileID}`}
+                  place="bottom"
+                  openOnClick={true}
+                  style={{ zIndex: 999 }}
+                >
+                  {tile.key === "uule" ? (
+                    tile.rawValue.split(LOCATION_SPLITTER).map((val, i) => {
+                      if (i === 0) {
+                        return `&${tile.key}=${val}`;
+                      }
+                      return <p key={tileID}>{val}</p>;
+                    })
+                  ) : (
+                    <p key={tileID}>{tile.value}</p>
+                  )}
+                </Tooltip>
+              </>
             );
           })}
         </div>
@@ -625,8 +655,6 @@ function App() {
           </button>
         </div>
       </div>
-
-      <Tooltip id="tile-tooltip" place="bottom" openOnClick={true} />
     </div>
   );
 }
