@@ -614,7 +614,7 @@ function App() {
                   {tile.key === "uule" ? (
                     tile.rawValue.split(LOCATION_SPLITTER).map((val, i) => {
                       if (i === 0) {
-                        return `&${tile.key}=${val}`;
+                        return <p key={tileID}>{`&${tile.key}=${val}`}</p>;
                       }
                       return <p key={tileID}>{val}</p>;
                     })
