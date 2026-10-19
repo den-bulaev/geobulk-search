@@ -14,6 +14,7 @@ export interface ISelectOption {
 }
 
 export interface ITile extends ISelectOption {
+  id: string;
   key: keyof IParamsFormData;
   rawValue: string;
   selectLabel?: string;
@@ -435,22 +436,28 @@ export const ChromeStorageKeys = {
   daysOpened: "chromeStorageDaysOpened",
 };
 
+export const LOCATION_SPLITTER = "{*}";
+
 export const getUULEString = (canonicalName: string): string => {
   if (!canonicalName) {
     return "";
   }
 
-  const googleLookupTable =
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";
+  const nameBytes = new TextEncoder().encode(canonicalName);
 
-  const length = canonicalName.length;
-  const lengthIndex = length % 64;
-  const lengthChar = googleLookupTable[lengthIndex];
-  const uulePrefix = `w+CAIQICI${lengthChar}`;
-  const utf8Bytes = new TextEncoder().encode(canonicalName);
-  const base64Encoded = btoa(String.fromCharCode(...utf8Bytes));
+  const payload = new Uint8Array([
+    0x08,
+    0x02,
+    0x10,
+    0x20,
+    0x22,
+    nameBytes.length,
+    ...nameBytes,
+  ]);
 
-  return `${uulePrefix}${base64Encoded}`;
+  const base64 = btoa(String.fromCharCode(...payload));
+
+  return `w+${base64}${LOCATION_SPLITTER}${canonicalName}`;
 };
 
 export const getSearchURL = (query: string, tiles: ITile[]): string => {
