@@ -18,6 +18,7 @@ export interface ITile extends ISelectOption {
   key: keyof IParamsFormData;
   rawValue: string;
   selectLabel?: string;
+  canonicalName?: string;
 }
 
 export interface ISelectNames {
@@ -436,8 +437,6 @@ export const ChromeStorageKeys = {
   daysOpened: "chromeStorageDaysOpened",
 };
 
-export const LOCATION_SPLITTER = "{*}";
-
 export const getUULEString = (canonicalName: string): string => {
   if (!canonicalName) {
     return "";
@@ -457,7 +456,7 @@ export const getUULEString = (canonicalName: string): string => {
 
   const base64 = btoa(String.fromCharCode(...payload));
 
-  return `w+${base64}${LOCATION_SPLITTER}${canonicalName}`;
+  return `w+${base64}`;
 };
 
 export const getSearchURL = (query: string, tiles: ITile[]): string => {

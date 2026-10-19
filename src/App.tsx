@@ -22,7 +22,6 @@ import {
   ISelectOption,
   ITile,
   labelTexts,
-  LOCATION_SPLITTER,
   lrOptions,
   removeInputMark,
   selectStyles,
@@ -54,6 +53,15 @@ function App() {
   const epqRef = useRef<HTMLInputElement>(null);
   const filetypeRef = useRef<HTMLInputElement>(null);
   const siteSearchRef = useRef<HTMLInputElement>(null);
+  const uuleRef = useRef<{
+    element: HTMLInputElement | null;
+    meta: { canonicalName: string };
+  }>({
+    element: null,
+    meta: {
+      canonicalName: "",
+    },
+  });
 
   useEffect(() => {
     chrome.runtime.sendMessage(
@@ -117,9 +125,14 @@ function App() {
         );
         break;
 
-      default:
+      default: {
+        if (tile.key === "uule") {
+          uuleRef.current.meta.canonicalName = tile.canonicalName || "";
+        }
+
         (formRef.current?.elements.namedItem(tile.key) as RadioNodeList).value =
           tile.rawValue;
+      }
     }
   };
 
@@ -138,12 +151,7 @@ function App() {
 
     keys.forEach((key) => {
       if (data[key]) {
-        let paramText = data[key];
-
-        if (key === "uule") {
-          paramText = data[key].split(LOCATION_SPLITTER)[0];
-        }
-
+        const paramText = data[key];
         const preparedParam = `&${key}=${paramText}`;
 
         rawTiles.push({
@@ -154,6 +162,8 @@ function App() {
           selectLabel: Object.values(ESelectNames).includes(key as ESelectNames)
             ? getSelectLabel(key)
             : undefined,
+          canonicalName:
+            key === "uule" ? uuleRef.current.meta.canonicalName : undefined,
           key,
         });
       }
@@ -263,6 +273,7 @@ function App() {
 
     if (input) {
       input.value = getUULEString(location);
+      uuleRef.current.meta.canonicalName = location;
     }
 
     setIsDirty(true);
@@ -456,7 +467,14 @@ function App() {
             </label>
 
             <label className="element-hidden">
-              <input type="text" name="uule" className="text-input" />
+              <input
+                ref={(el) => {
+                  uuleRef.current.element = el;
+                }}
+                type="text"
+                name="uule"
+                className="text-input"
+              />
             </label>
 
             <label className="input-wrapper">
@@ -592,16 +610,9 @@ function App() {
                 data-tooltip-id="tile-tooltip"
                 data-tooltip-html={
                   tile.key === "uule"
-                    ? tile.rawValue
-                      .split(LOCATION_SPLITTER)
-                      .map((val, i) => {
-                        if (i === 0) {
-                          return `<p key=${tileID}>&${tile.key}=${val}</p>`;
-                        }
-                        return `<p key=${tileID}>${val}</p>`;
-                      })
-                      .join("")
-                    : `<p key=${tileID}>${tile.value}</p>`
+                    ? `<p>${tile.value}</p>` +
+                      `<p>${tile.canonicalName || ""}</p>`
+                    : `<p>${tile.value}</p>`
                 }
                 className={`tile tooltip-${tileID}`}
                 key={tileID}
