@@ -86,7 +86,6 @@ export function PresetsModal(props: TPresetsModalProps) {
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setErrorKey("");
-    // setSelectedPreset(null);
   };
 
   const onClickItem = (chosenPreset: IBaseItem<ITile>) => {
