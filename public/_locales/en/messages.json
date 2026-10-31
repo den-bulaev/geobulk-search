@@ -6,7 +6,7 @@
     "message": "GeoBulk — Bulk Geo Search"
   },
   "appDescription": {
-    "message": "Multi-search in one click. Choose your search location, filters, presets, and more."
+    "message": "Save locations and search filters as presets. Run searches across selected presets with one click."
   },
 
   "startLabel": {

@@ -1,33 +1,16 @@
-import {
-  MouseEvent,
-  RefObject,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { MouseEvent, useEffect, useMemo, useRef, useState } from "react";
 
 import { v4 as uuidv4 } from "uuid";
+import { Tooltip } from "react-tooltip";
+import { move } from "@dnd-kit/helpers";
+import { DragEndEvent } from "@dnd-kit/react";
 
 import { BaseModal } from "../BaseModal/BaseModal";
+import { SortableUl } from "../Sortable/SortableUl/SortableUl";
+
+import { IPreset, TPresetsModalProps } from "./utils";
 import { BackgroundActions, getSearchURL, ITile } from "../../utils";
-
-import { TrashIcon } from "../Icons/TrashIcon";
-import { Tooltip } from "react-tooltip";
-
-interface IPreset {
-  id: string;
-  key: string;
-  params: ITile[];
-  isChecked: boolean;
-}
-
-type TPresetsModalProps = {
-  tiles: ITile[];
-  searchQuery: RefObject<HTMLInputElement | null>;
-  applyPresets: (tiles: ITile[]) => void;
-  handleClickSearch: () => void;
-};
+import { IBaseItem } from "../Sortable/types";
 
 export function PresetsModal(props: TPresetsModalProps) {
   const { tiles, searchQuery, applyPresets, handleClickSearch } = props;
@@ -35,7 +18,6 @@ export function PresetsModal(props: TPresetsModalProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [presets, setPresets] = useState<IPreset[]>([]);
   const [errorKey, setErrorKey] = useState("");
-  const [selectedPreset, setSelectedPreset] = useState<IPreset | null>(null);
 
   const presetNameRef = useRef<HTMLInputElement>(null);
 
@@ -104,16 +86,10 @@ export function PresetsModal(props: TPresetsModalProps) {
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setErrorKey("");
-    setSelectedPreset(null);
   };
 
-  const handleClickPreset = (
-    e: MouseEvent<HTMLLIElement>,
-    chosenPreset: IPreset,
-  ) => {
-    e.stopPropagation();
+  const onClickItem = (chosenPreset: IBaseItem<ITile>) => {
     applyPresets(chosenPreset.params);
-    setSelectedPreset(chosenPreset);
   };
 
   const bulkUpload = () => {
@@ -175,6 +151,26 @@ export function PresetsModal(props: TPresetsModalProps) {
     );
   };
 
+  const onDragEnd = (e: DragEndEvent) => {
+    setPresets((prev) => {
+      const sortedPresets = move(prev, e);
+
+      chrome.runtime.sendMessage(
+        {
+          action: BackgroundActions.saveSortedPresets,
+          state: sortedPresets,
+        },
+        () => {
+          if (chrome.runtime.lastError) {
+            console.error("Error:", chrome.runtime.lastError);
+          }
+        },
+      );
+
+      return sortedPresets;
+    });
+  };
+
   return (
     <>
       <div>
@@ -232,36 +228,13 @@ export function PresetsModal(props: TPresetsModalProps) {
             <p className="useful-tip">{tipText}</p>
           </aside>
 
-          <div className="list-wrapper">
-            <ul className="location-list" onClick={() => 1}>
-              {presets.map((preset) => {
-                return (
-                  <li
-                    className={`list-item preset-list-item${selectedPreset?.key === preset.key ? " background-light-purple" : ""}`}
-                    key={preset.id}
-                    onClick={(e) => handleClickPreset(e, preset)}
-                  >
-                    <div className="preset">
-                      <input
-                        type="checkbox"
-                        checked={preset.isChecked}
-                        onClick={(e) => handleClickCheckbox(e, preset.id)}
-                      ></input>
-                      <span className="checkbox"></span>
-                      <span className="preset-name">{preset.key}</span>
-                    </div>
-
-                    <button
-                      className="delete-preset"
-                      onClick={(e) => deletePreset(e, preset.key)}
-                    >
-                      <TrashIcon />
-                    </button>
-                  </li>
-                );
-              })}
-            </ul>
-          </div>
+          <SortableUl
+            sortableData={presets}
+            onClickItem={onClickItem}
+            onClickCheckbox={handleClickCheckbox}
+            onDeleteItem={deletePreset}
+            onDragEnd={onDragEnd}
+          />
         </BaseModal>
       )}
     </>
