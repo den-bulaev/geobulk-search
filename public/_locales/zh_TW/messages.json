@@ -6,6 +6,6 @@
     "message": "GeoBulk — Bulk Geo Search"
   },
   "appDescription": {
-    "message": "一鍵進行多項搜尋。選擇搜尋位置、篩選條件、預設等更多選項。"
+    "message": "將地點和搜尋篩選條件儲存為預設。只需點擊一次，即可使用選取的預設進行搜尋。"
   }
 }

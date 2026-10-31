@@ -425,6 +425,7 @@ export const BackgroundActions = {
   addPreset: "setPresets",
   deletePreset: "deletePreset",
   updatePresets: "updatePresets",
+  saveSortedPresets: "saveSortedPresets",
   getIsRated: "getIsRated",
   setIsRated: "setIsRated",
   setDaysOpened: "setDaysOpened",

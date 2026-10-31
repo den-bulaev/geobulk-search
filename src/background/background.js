@@ -163,6 +163,12 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       });
       break;
 
+    case BackgroundActions.saveSortedPresets:
+      chrome.storage.local.set({
+        [ChromeStorageKeys.presets]: message.state,
+      });
+      break;
+
     case BackgroundActions.getIsRated:
       chrome.storage.local.get(ChromeStorageKeys.isRated, (res) => {
         sendResponse({ data: !!res[ChromeStorageKeys.isRated] });
